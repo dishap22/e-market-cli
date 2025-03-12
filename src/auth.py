@@ -51,5 +51,5 @@ def authenticate_user(username, password):
     conn.close()
 
     if result and result[1] == hash_password(password):
-        return (result[0], result[2])  # (user_id, user_type)
+        return (result[0], result[2])
     return None

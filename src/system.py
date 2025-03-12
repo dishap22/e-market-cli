@@ -48,27 +48,23 @@ class EMarketSystem:
             return False
 
         try:
-            # Start transaction
             c = self.conn.cursor()
 
-            # Calculate total
             total = sum(item['price'] for item in self.current_user.cart)
             order_count = len(self.current_user.cart)
 
-            # Apply bulk discount if more than 10 items in cart
             discount_applied = False
             if order_count > 10:
-                total *= 0.9  # 10% discount
+                total *= 0.9
                 discount_applied = True
-                discount_amount = 0.1  # 10% discount
+                discount_amount = 0.1
                 print(f"Applied 10% bulk discount on your total order of ${total:.2f}!")
 
-            # Check for coupon
             best_coupon = self.get_best_valid_coupon(self.current_user.id)
             coupon_discount = 0
             if best_coupon:
                 coupon_discount = best_coupon.discount
-                if not discount_applied or coupon_discount > 0.1:  # Use better discount
+                if not discount_applied or coupon_discount > 0.1:
                     total *= (1 - coupon_discount)
                     discount_applied = True
                     discount_amount = coupon_discount
@@ -78,7 +74,6 @@ class EMarketSystem:
             for item in self.current_user.cart:
                 product_id = item['product_id']
 
-                # Get product details including seller_id
                 c.execute('''SELECT id, price, seller_id FROM products WHERE id = ?''', (product_id,))
                 product_data = c.fetchone()
 
@@ -86,12 +81,10 @@ class EMarketSystem:
                     print(f"Product {product_id} is no longer available.")
                     continue
 
-                # Calculate discounted price for this item
                 item_price = product_data[1]
                 if discount_applied:
                     item_price *= (1 - discount_amount)
 
-                # Create an order for this item
                 c.execute('''INSERT INTO orders
                            (customer_id, product_id, seller_id, price, order_date)
                            VALUES (?, ?, ?, ?, ?)''',
@@ -110,7 +103,6 @@ class EMarketSystem:
             self.conn.commit()
             self.current_user.cart = []
 
-            # Display order summary
             print(f"\nCheckout completed successfully!")
             if discount_applied:
                 print(f"Discount applied: {discount_amount*100}%")

@@ -76,7 +76,7 @@ def handle_customer(system):
             pid = input("Enter product ID to add to cart (0 to cancel): ")
             if pid.isdigit() and int(pid) > 0:
                 pid = int(pid)
-            # Find the product in the search results
+
             matching_products = [p for p in products if p[0] == pid]
             if matching_products:
                 product = matching_products[0]
@@ -105,7 +105,7 @@ def handle_customer(system):
                 print("Your cart is empty.")
             else:
                 print(f"Total: ${total:.2f}")
-                # Show discount preview
+
                 if len(system.current_user.cart) > 10:
                     print(f"You qualify for a 10% bulk discount: ${total * 0.9:.2f}")
 
@@ -131,7 +131,7 @@ def handle_customer(system):
                     print(f"Price: ${order[1]:.2f}")
                     print(f"Order Date: {order[2]}")
                     print(f"Delivery Status: {order[3]}")
-                    if order[4]:  # Tracking number
+                    if order[4]:
                         print(f"Tracking Number: {order[4]}")
 
                     total_spent += order[1]
@@ -205,7 +205,7 @@ def handle_seller(system):
                     print(f"Price: ${order[2]:.2f}")
                     print(f"Order Date: {order[3]}")
                     print(f"Delivery Status: {order[4]}")
-                    if order[5]:  # Tracking number
+                    if order[5]:
                         print(f"Tracking Number: {order[5]}")
 
         elif choice == '4':
