@@ -170,7 +170,11 @@ def handle_seller(system):
                 continue
 
             pid = system.add_product(name, price, category)
-            print(f"Product added! ID: {pid}")
+
+            if pid:
+                print(f"Product added! ID: {pid}")
+            else:
+                print("Failed to add product")
 
         elif choice == '2':
             c = system.conn.cursor()
